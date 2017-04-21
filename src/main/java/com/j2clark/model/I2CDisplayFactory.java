@@ -18,13 +18,14 @@ import java.io.IOException;
 
 public interface I2CDisplayFactory {
 
-    I2CDisplay newInstance() throws Exception;
+    I2CDisplay newInstance() throws IOException, I2CFactory.UnsupportedBusNumberException;
 
     class I2CDisplayFactoryImpl implements I2CDisplayFactory {
 
         // todo: add params to newInstance?
         @Override
-        public I2CDisplay newInstance() throws Exception {
+        public I2CDisplay newInstance() throws IOException,
+                                               I2CFactory.UnsupportedBusNumberException {
 
             final GpioController gpio = GpioFactory.getInstance();
             I2CBus i2c;
