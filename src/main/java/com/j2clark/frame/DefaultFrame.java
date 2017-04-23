@@ -1,7 +1,5 @@
 package com.j2clark.frame;
 
-import com.j2clark.model.I2CDisplay;
-
 import java.awt.*;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -47,36 +45,11 @@ public class DefaultFrame extends AbstractGraphics2DFrame implements Frame {
         data = new ArrayList<>(ips);
     }
 
-    /*@Override
-    public void display(I2CDisplay display) {
-        display.clearImage();
-
-        Graphics2D graphics = display.getGraphics();
-        graphics.setFont(font);
-        int i = 0;
-        for (String s : data) {
-            graphics.drawString(s, 0, fontWeight * (i++ + 1));
-        }
-
-
-        display.displayImage();
-    }*/
-
     protected void render(Graphics2D graphics) {
         graphics.setFont(font);
         int i = 0;
         for (String s : data) {
             graphics.drawString(s, 0, fontWeight * (i++ + 1));
         }
-    }
-
-    @Override
-    public String asString() {
-        StringBuilder sb = new StringBuilder();
-        for (String s : data) {
-            if (sb.length() > 0) sb.append("\n");
-            sb.append(s);
-        }
-        return sb.toString();
     }
 }

@@ -6,6 +6,4 @@ public interface Frame {
 
     void display(I2CDisplay display);
 
-    // logging friendly string
-    String asString();
 }

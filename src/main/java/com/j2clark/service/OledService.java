@@ -2,6 +2,8 @@ package com.j2clark.service;
 
 import com.j2clark.model.I2CDisplay;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -12,7 +14,9 @@ import java.io.IOException;
 public class OledService {
 
     private static final long RUN_EVERY_50_MILLIS = 50L;
+    private static final long RUN_EVERY_1_SECOND = 1000L;
 
+    private final Logger logger = LoggerFactory.getLogger(getClass());
     private final I2CDisplay display;
     private final DisplayState displayState;
 
@@ -24,9 +28,15 @@ public class OledService {
         this.display = display;
     }
 
-    @Scheduled(fixedDelay = RUN_EVERY_50_MILLIS, initialDelay = 1000)
+    // todo: currently produces a jagged seconds display - perhaps cron better approach? takes between 500 - 600ms to render
+    @Scheduled(fixedDelay = 200, initialDelay = 1000)
+
     public void updateDisplay() {
+        long start = System.currentTimeMillis();
         displayState.getFrame().display(display);
+        long end = System.currentTimeMillis();
+
+        logger.info("render["+(end-start)+"] (ms)");
     }
 
 }
