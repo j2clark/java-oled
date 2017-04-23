@@ -28,9 +28,8 @@ public class OledService {
         this.display = display;
     }
 
-    // todo: currently produces a jagged seconds display - perhaps cron better approach? takes between 500 - 600ms to render
-    @Scheduled(fixedDelay = 200, initialDelay = 1000)
-
+    //@Scheduled(fixedDelay = 200, initialDelay = 1000)
+    @Scheduled(cron = "*/1 * * * * *") // run every seconf - much smoother display
     public void updateDisplay() {
         long start = System.currentTimeMillis();
         displayState.getFrame().display(display);
