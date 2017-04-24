@@ -1,5 +1,7 @@
 package com.j2clark.frame;
 
+import com.j2clark.model.StationTimeTable;
+import com.j2clark.model.StationTimeTables;
 import com.j2clark.service.ScheduleService;
 import com.j2clark.model.StationTime;
 
@@ -11,7 +13,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 public class PlatformFrame extends AbstractGraphics2DFrame {
 
@@ -32,89 +33,13 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
         this.scheduleService = scheduleService;
     }
 
-    public static class StationTimeTable {
-        private final String line;
-        private final String name;
-        private final StationTime arrives;
-        private final StationTime departs;
-
-        public StationTimeTable(String line, String name, StationTime arrives, StationTime departs) {
-            this.line = line;
-            this.name = name;
-            this.arrives = arrives;
-            this.departs = departs;
-        }
-
-        public String getLine() {
-            return line;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public StationTime getArrives() {
-            return arrives;
-        }
-
-        public StationTime getDeparts() {
-            return departs;
-        }
-    }
-
     protected List<StationTimeTable> getArrivingTrains() {
-
         // todo: feed this in at initialization, and reduc as time goes on
-        ScheduleService.Trains trains = //scheduleService.findCurrentTrains().asTrains();
-            scheduleService.findAllTrains().asTrains();
-
-
-        // extract station relevant details (all platforms/directions)
-
-        List<StationTimeTable> stationTimeTables = trains.asStationTimeTables(stationName.text, "westbound");
-
-        /*Map<String, List<StationTimeTable>> map = new HashMap<>();
-        StationTime now = new StationTime();
-        for (Train train : trains.asList()) {
-
-            Train.Timetable timetable = train.getTimetables().get(stationName.text);
-            if (timetable.getDeparts().after(now)) {
-                String direction = train.getDirection();
-                java.util.List<StationTimeTable> list = map.get(direction);
-                if (list == null) {
-                    list = new ArrayList<>();
-                    map.put(direction, list);
-                }
-
-                list.add(new StationTimeTable(train.getLine(), train.getName(), timetable.getArrives(), timetable.getDeparts()));
-            }
-        }
-
-        // I only care about westbound for now
-        List<StationTimeTable> stationTimeTables = map.get("westbound").stream().sorted((o1, o2) -> o1.getArrives().compareTo(o2.getArrives())).collect(Collectors.toList());
-*/
-        stationTimeTables = stationTimeTables.stream().limit(3).collect(Collectors.toList());
-
-
-        return stationTimeTables;
-
-        /*List<Train> results = trains
-            .filterByDirection("westbound")
-            //.filterByStation("Marienplatz")
-            .currentForStation("Marienplatz")
-            .orderByArrivalAtStation("Marienplatz")
-            .limit(3)
-            .asList();
-
-        return results;*/
-
-        /*return scheduleService.findCurrentTrains()
-            .filterByDirection("westbound")
-            .filterByStation("Marienplatz")
-            .asTrains(3)
-            .stream()
-            .sorted((o1, o2) -> o1.getArrives().compareTo(o2.getArrives())).collect(
-                Collectors.toList());*/
+        return new StationTimeTables(
+            scheduleService.findAllTrains().getStationTimeTables("Marienplatz", "westbound"))
+            .currentForTime(new StationTime())
+            .sortedByArrival()
+            .asList(3);
     }
 
     @Override
@@ -175,21 +100,13 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
 
     public static class TrainText {
 
-        //private final Train train;
-        //private final String station;
-        //private final String name;
         private final StationTimeTable timeTable;
         private final Font font;
         private final Dimension display;
 
-
-        public TrainText(//final Train train,
-                         final StationTimeTable timeTable,
-                         //final String station,
+        public TrainText(final StationTimeTable timeTable,
                          final Font font,
                          final Dimension display) {
-            //this.train = train;
-            //this.station = station;
             this.timeTable = timeTable;
             this.font = font;
             this.display = display;
@@ -201,7 +118,7 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
             int time_width = metrics.getStringBounds("MM,ss", graphics).getBounds().width;
             int train_width = display.width - time_width;
 
-            String name = timeTable.getName();//train.getName();
+            String name = timeTable.getName();
             Rectangle bounds = metrics.getStringBounds(name, graphics).getBounds();
             if (bounds.width > train_width) {
                 name = GraphicsUtil.abbreviate(name, metrics, train_width);
