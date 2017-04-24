@@ -3,6 +3,7 @@ package com.j2clark;
 import com.j2clark.frame.DefaultFrame;
 import com.j2clark.frame.Frame;
 import com.j2clark.frame.PlatformFrame;
+import com.j2clark.service.ScheduleService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +27,8 @@ public class FrameConfig {
      * @throws Exception
      */
     @Bean("platformFrame")
-    public Frame platformFrame(Dimension displayDimensions) throws Exception {
-        return new PlatformFrame(displayDimensions);
+    public Frame platformFrame(Dimension displayDimensions, ScheduleService scheduleService) throws Exception {
+        return new PlatformFrame(displayDimensions, scheduleService);
     }
 
 }

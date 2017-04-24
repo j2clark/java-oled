@@ -13,9 +13,6 @@ import java.io.IOException;
 @Service
 public class OledService {
 
-    private static final long RUN_EVERY_50_MILLIS = 50L;
-    private static final long RUN_EVERY_1_SECOND = 1000L;
-
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private final I2CDisplay display;
     private final DisplayState displayState;
@@ -29,7 +26,7 @@ public class OledService {
     }
 
     //@Scheduled(fixedDelay = 200, initialDelay = 1000)
-    @Scheduled(cron = "*/1 * * * * *") // run every seconf - much smoother display
+    @Scheduled(cron = "*/1 * * * * *") // run every second - much smoother display
     public void updateDisplay() {
         long start = System.currentTimeMillis();
         displayState.getFrame().display(display);

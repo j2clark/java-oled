@@ -551,85 +551,86 @@ public interface I2CDisplayFactory {
 
             @Override
             public void begin() throws IOException {
-                logger.info("being");
+                logger.trace("being");
             }
 
             @Override
             public void begin(int vccState) throws IOException {
-                logger.info("being["+vccState+"]");
+                logger.trace("being[" + vccState + "]");
             }
 
             @Override
             public void reset() {
-                logger.info("reset");
+                logger.trace("reset");
             }
 
             @Override
             public void display() {
-                logger.info("display");
+                logger.trace("display");
             }
 
             @Override
             public void clear() {
-                logger.info("clear");
+                logger.trace("clear");
             }
 
             @Override
             public void setContrast(byte contrast) {
-                logger.info("setContrast["+contrast+"]");
+                logger.trace("setContrast[" + contrast + "]");
             }
 
             @Override
             public void dim(boolean dim) {
-                logger.info("dim["+dim+"]");
+                logger.trace("dim[" + dim + "]");
             }
 
             @Override
             public void invertDisplay(boolean invert) {
-                logger.info("invertDisplay["+invert+"]");
+                logger.trace("invertDisplay[" + invert + "]");
             }
 
             @Override
             public void scrollHorizontally(boolean left, int start, int end) {
-                logger.info("scrollHorizontally["+left+", "+start+", "+end+"]");
+                logger.trace("scrollHorizontally[" + left + ", " + start + ", " + end + "]");
             }
 
             @Override
             public void scrollDiagonally(boolean left, int start, int end) {
-                logger.info("scrollDiagonally["+left+", "+start+", "+end+"]");
+                logger.trace("scrollDiagonally[" + left + ", " + start + ", " + end + "]");
             }
 
             @Override
             public void stopScroll() {
-                logger.info("stopScroll");
+                logger.trace("stopScroll");
             }
 
             @Override
             public int getWidth() {
-                logger.info("getWidth");
+                logger.trace("getWidth");
                 return width;
             }
 
             @Override
             public int getHeight() {
-                logger.info("getHeight");
+                logger.trace("getHeight");
                 return height;
             }
 
             @Override
             public boolean setPixel(int x, int y, boolean white) {
-                logger.info("setPixel["+x+", "+y+", "+white+"]");
+                logger.trace("setPixel[" + x + ", " + y + ", " + white + "]");
                 return true;
             }
 
             @Override
             public void displayImage() {
-                logger.info("displayImage");
+                logger.trace(graphics.toString());
+
             }
 
             @Override
             public void setImage(BufferedImage img, boolean createGraphics) {
-                logger.info("setImage["+img+", "+createGraphics+"]");
+                logger.trace("setImage[" + img + ", " + createGraphics + "]");
                 this.image = img;
                 if (createGraphics) {
                     this.graphics = img.createGraphics();
@@ -638,7 +639,7 @@ public interface I2CDisplayFactory {
 
             @Override
             public void clearImage() {
-                logger.info("clearImage");
+                logger.trace("clearImage");
             }
 
             @Override
@@ -655,12 +656,12 @@ public interface I2CDisplayFactory {
 
             @Override
             public void horizontalLine(int position) {
-                logger.info("horizontalLine["+position+"]");
+                logger.trace("horizontalLine[" + position + "]");
             }
 
             @Override
             public Graphics2D getGraphics() {
-                logger.info("getGraphics");
+                logger.trace("getGraphics");
                 return graphics;
             }
         }
