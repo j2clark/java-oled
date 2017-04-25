@@ -5,29 +5,29 @@ public class StationCall {
     private String station; // Herrsching
     private String line;    // S5
     private String train;   // 734
-    private StationTime arrives;
-    private StationTime departs;
+    private TimeOfDay arrives;
+    private TimeOfDay departs;
     private boolean startOfLine; // no arrives
     private boolean endOfLine; // no departs
 
     public static StationCall endStation(String station,
                                          String line,
                                          String train,
-                                         StationTime arrives) {
+                                         TimeOfDay arrives) {
         return new StationCall(station, line, train, false, arrives, true, null);
     }
 
     public static StationCall originStation(String station,
                                             String line,
                                             String train,
-                                            StationTime departs) {
+                                            TimeOfDay departs) {
         return new StationCall(station, line, train, true, null, false, departs);
     }
 
     public static StationCall station(String station,
                                             String line,
                                             String train,
-                                            StationTime arrives,
+                                            TimeOfDay arrives,
                                             int duration) {
         return new StationCall(station, line, train, false, arrives, false, arrives.addSeconds(duration));
     }
@@ -36,9 +36,9 @@ public class StationCall {
                 String line,
                 String train,
                 boolean startOfLine,
-                StationTime arrives,
+                TimeOfDay arrives,
                 boolean endOfLine,
-                StationTime departs) {
+                TimeOfDay departs) {
         this.station = station;
         this.line = line;
         this.train = train;
@@ -48,11 +48,11 @@ public class StationCall {
         this.endOfLine = endOfLine;
     }
 
-    public StationTime getArrives() {
+    public TimeOfDay getArrives() {
         return arrives;
     }
 
-    public StationTime getDeparts() {
+    public TimeOfDay getDeparts() {
         return departs;
     }
 

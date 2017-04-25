@@ -3,10 +3,10 @@ package com.j2clark.model;
 public class StationTimeTable {
     private final String line;
     private final String name;
-    private final StationTime arrives;
-    private final StationTime departs;
+    private final TimeOfDay arrives;
+    private final TimeOfDay departs;
 
-    public StationTimeTable(String line, String name, StationTime arrives, StationTime departs) {
+    public StationTimeTable(String line, String name, TimeOfDay arrives, TimeOfDay departs) {
         this.line = line;
         this.name = name;
         this.arrives = arrives;
@@ -21,11 +21,11 @@ public class StationTimeTable {
         return name;
     }
 
-    public StationTime getArrives() {
+    public TimeOfDay getArrives() {
         return arrives;
     }
 
-    public StationTime getDeparts() {
+    public TimeOfDay getDeparts() {
         return departs;
     }
 }

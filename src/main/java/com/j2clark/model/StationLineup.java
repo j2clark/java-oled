@@ -1,13 +1,15 @@
 package com.j2clark.model;
 
+import com.j2clark.service.ScheduleService;
+
 import java.util.List;
 
 public class StationLineup {
 
-    private final String direction;
+    private final ScheduleService.Direction direction;
     private final List<StationCall> stationCalls;
 
-    public StationLineup(String direction, List<StationCall> stationCalls) {
+    public StationLineup(ScheduleService.Direction direction, List<StationCall> stationCalls) {
         this.direction = direction;
         this.stationCalls = stationCalls;
     }
@@ -17,7 +19,7 @@ public class StationLineup {
 
         StationCall origin = stationCalls.get(0);
         StationCall terminal = stationCalls.get(stationCalls.size() -1);
-        StationTime now = new StationTime();
+        TimeOfDay now = new TimeOfDay();
 
         boolean departedOrigin =  origin.getDeparts().before(now);
         boolean notArrivedTerminal = terminal.getArrives().after(now);
@@ -33,7 +35,7 @@ public class StationLineup {
         return stationCalls.get(0);
     }
 
-    public String getDirection() {
+    public ScheduleService.Direction getDirection() {
         return direction;
     }
 

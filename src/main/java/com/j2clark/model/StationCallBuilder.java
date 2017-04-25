@@ -6,9 +6,9 @@ public class StationCallBuilder {
     private String line;
     private String train;
     private boolean origin;
-    private StationTime arrives;
+    private TimeOfDay arrives;
     private boolean terminal;
-    private StationTime departs;
+    private TimeOfDay departs;
 
 
 
@@ -57,10 +57,10 @@ public class StationCallBuilder {
     }
 
     public StationCallBuilder withArrives(int hour, int min, int sec) {
-        return withArrives(new StationTime(hour, min, sec));
+        return withArrives(new TimeOfDay(hour, min, sec));
     }
 
-    public StationCallBuilder withArrives(StationTime arrives) {
+    public StationCallBuilder withArrives(TimeOfDay arrives) {
         this.arrives = arrives;
         return this;
     }
@@ -74,10 +74,10 @@ public class StationCallBuilder {
     }
 
     public StationCallBuilder withDeparts(int hour, int min, int sec) {
-        return withDeparts(new StationTime(hour, min, sec));
+        return withDeparts(new TimeOfDay(hour, min, sec));
     }
 
-    public StationCallBuilder withDeparts(StationTime departs) {
+    public StationCallBuilder withDeparts(TimeOfDay departs) {
         this.departs = departs;
         return this;
     }

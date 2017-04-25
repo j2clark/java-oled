@@ -1,16 +1,17 @@
 package com.j2clark.frame;
 
 import com.j2clark.model.StationTimeTable;
-import com.j2clark.model.StationTimeTables;
+import com.j2clark.model.TimeOfDay;
 import com.j2clark.service.ScheduleService;
-import com.j2clark.model.StationTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 
 import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Date;
 
@@ -18,13 +19,17 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    private final boolean devEnvironment;
     private final CenteredText stationName;
     private final CenteredText platform;
     private final CenteredClock clock;
     private final TrainTextFactory trainTextFactory;
     private final ScheduleService scheduleService;
 
-    public PlatformFrame(Dimension displayDimensions, ScheduleService scheduleService) {
+    public PlatformFrame(Environment environment,
+                         Dimension displayDimensions,
+                         ScheduleService scheduleService) {
+        this.devEnvironment = Arrays.asList(environment.getActiveProfiles()).contains("dev");
         Font mono_plain = new Font("Monospaced", Font.PLAIN, 8);
         stationName  = new CenteredText("Marienplatz", mono_plain, displayDimensions);
         platform = new CenteredText("Platform 1", mono_plain, displayDimensions);
@@ -35,9 +40,10 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
 
     protected List<StationTimeTable> getArrivingTrains() {
         // todo: feed this in at initialization, and reduc as time goes on
-        return new StationTimeTables(
-            scheduleService.findAllTrains().getStationTimeTables("Marienplatz", "westbound"))
-            .currentForTime(new StationTime())
+        return /*new StationTimeTables(*/
+            scheduleService.findTimeTablesByStationAndDirection("Marienplatz",
+                                                                ScheduleService.Direction.westbound)/*)*/
+            .currentForTime(new TimeOfDay())
             .sortedByArrival()
             .asList(3);
     }
@@ -57,20 +63,20 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
             .render(y, graphics)
             .getHeight(graphics);
 
-        output.append("\t").append(stationName.getText(graphics)).append("\n");
+        if (devEnvironment) output.append("\t").append(stationName.getText(graphics)).append("\n");
 
 
         // platform
         y += platform
             .render(y, graphics)
             .getHeight(graphics);
-        output.append("\t").append(platform.getText(graphics)).append("\n");
+        if (devEnvironment) output.append("\t").append(platform.getText(graphics)).append("\n");
 
         // clock
         y += clock
             .render(y, graphics)
             .getHeight(graphics);
-        output.append("\t").append(clock.getText(graphics)).append("\n");
+        if (devEnvironment) output.append("\t").append(clock.getText(graphics)).append("\n");
 
         for (StationTimeTable train : trains) {
             TrainText trainText = trainTextFactory.newInstance(train);
@@ -78,10 +84,12 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
                 .render(y, graphics)
                 .getHeight(graphics);
 
-            output.append("\t").append(trainText.getText(graphics)).append("\n");
+            if (devEnvironment) output.append("\t").append(trainText.getText(graphics)).append("\n");
         }
 
-        logger.info(output.toString());
+        if (devEnvironment) {
+            logger.info(output.toString());
+        }
     }
 
     public static class TrainTextFactory {
@@ -112,13 +120,14 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
             this.display = display;
         }
 
+        private static String TIME_WSTR = "MM,ss min";
         protected String getName(Graphics graphics) {
             FontMetrics metrics = graphics.getFontMetrics(font);
 
-            int time_width = metrics.getStringBounds("MM,ss", graphics).getBounds().width;
+            int time_width = metrics.getStringBounds(TIME_WSTR, graphics).getBounds().width;
             int train_width = display.width - time_width;
 
-            String name = timeTable.getName();
+            String name = timeTable.getLine() + " " + timeTable.getName();
             Rectangle bounds = metrics.getStringBounds(name, graphics).getBounds();
             if (bounds.width > train_width) {
                 name = GraphicsUtil.abbreviate(name, metrics, train_width);
@@ -128,18 +137,18 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
 
         protected String getTime() {
 
-            StationTime now = new StationTime();
+            TimeOfDay now = new TimeOfDay();
 
-            StationTime time = new StationTime(Math.abs(now.getSecondsOfDay() - timeTable.getArrives().getSecondsOfDay()));
+            TimeOfDay time = new TimeOfDay(Math.abs(now.getSecondsOfDay() - timeTable.getArrives().getSecondsOfDay()));
 
             int min = time.getMinute();
             int sec = time.getSecond();
 
             if (min < 2) {
-                return String.format("%d,%02d", min, sec);
+                return String.format("%d,%02d min", min, sec);
             } else {
                 min += 1;
-                return String.format("%d   ", min);
+                return String.format("%d    min", min);
             }
         }
 
@@ -148,7 +157,7 @@ public class PlatformFrame extends AbstractGraphics2DFrame {
             String time = getTime();
 
             FontMetrics metrics = graphics.getFontMetrics(font);
-            int time_width = metrics.getStringBounds("10 min", graphics).getBounds().width;
+            int time_width = metrics.getStringBounds(TIME_WSTR, graphics).getBounds().width;
 
             int time_x = display.width - time_width;
             if (metrics.getStringBounds(time, graphics).getBounds().width < time_width) {

@@ -2,7 +2,7 @@ package com.j2clark.model;
 
 import java.util.Calendar;
 
-public class StationTime implements Comparable<StationTime> {
+public class TimeOfDay implements Comparable<TimeOfDay> {
 
     private final int hourOfDay;
 
@@ -21,7 +21,7 @@ public class StationTime implements Comparable<StationTime> {
     private final int minute;
     private final int second;
 
-    public StationTime() {
+    public TimeOfDay() {
         Calendar c = Calendar.getInstance();
         hourOfDay = c.get(Calendar.HOUR_OF_DAY);
         minute = c.get(Calendar.MINUTE);
@@ -29,7 +29,7 @@ public class StationTime implements Comparable<StationTime> {
     }
 
     private static int HOURS_24 = 24*60*60;
-    public StationTime(long secondsOfDay) {
+    public TimeOfDay(long secondsOfDay) {
         if (secondsOfDay > HOURS_24) {
             if (secondsOfDay > 2* HOURS_24) {
                 throw new IllegalArgumentException(secondsOfDay
@@ -50,7 +50,7 @@ public class StationTime implements Comparable<StationTime> {
         second = remainingSeconds;
     }
 
-    public StationTime(int hourOfDay, int minute, int second) {
+    public TimeOfDay(int hourOfDay, int minute, int second) {
         this.hourOfDay = hourOfDay;
         this.minute = minute;
         this.second = second;
@@ -64,25 +64,25 @@ public class StationTime implements Comparable<StationTime> {
         return (hourOfDay * 60*60) + (minute *60) + second;
     }
 
-    public boolean before(StationTime time) {
+    public boolean before(TimeOfDay time) {
         return getSecondsOfDay() < time.getSecondsOfDay();
     }
 
-    public boolean after(StationTime time) {
+    public boolean after(TimeOfDay time) {
         return getSecondsOfDay() > time.getSecondsOfDay();
 
     }
 
-    public StationTime addSeconds(int seconds) {
-        return new StationTime(getSecondsOfDay() + seconds);
+    public TimeOfDay addSeconds(int seconds) {
+        return new TimeOfDay(getSecondsOfDay() + seconds);
     }
 
-    public StationTime addMinutes(int minutes) {
-        return new StationTime(getSecondsOfDay() + (minutes*60));
+    public TimeOfDay addMinutes(int minutes) {
+        return new TimeOfDay(getSecondsOfDay() + (minutes*60));
     }
 
-    public StationTime subtractMinutes(int minutes) {
-        return new StationTime(getSecondsOfDay() - (60*minutes));
+    public TimeOfDay subtractMinutes(int minutes) {
+        return new TimeOfDay(getSecondsOfDay() - (60*minutes));
     }
 
     @Override
@@ -90,11 +90,11 @@ public class StationTime implements Comparable<StationTime> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof StationTime)) {
+        if (!(o instanceof TimeOfDay)) {
             return false;
         }
 
-        StationTime that = (StationTime) o;
+        TimeOfDay that = (TimeOfDay) o;
 
         if (hourOfDay != that.hourOfDay) {
             return false;
@@ -115,7 +115,7 @@ public class StationTime implements Comparable<StationTime> {
     }
 
     @Override
-    public int compareTo(StationTime o) {
+    public int compareTo(TimeOfDay o) {
         return Integer.compare(getSecondsOfDay(), o.getSecondsOfDay());
     }
 }

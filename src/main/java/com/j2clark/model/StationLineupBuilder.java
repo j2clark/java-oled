@@ -1,5 +1,7 @@
 package com.j2clark.model;
 
+import com.j2clark.service.ScheduleService;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,10 +9,10 @@ import java.util.List;
 
 public class StationLineupBuilder {
 
-    private String direction;
+    private ScheduleService.Direction direction;
     private List<StationCall> stationCalls = new ArrayList<>();
 
-    public StationLineupBuilder(String direction) {
+    public StationLineupBuilder(ScheduleService.Direction direction) {
         this.direction = direction;
     }
 

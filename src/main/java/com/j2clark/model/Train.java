@@ -3,8 +3,8 @@ package com.j2clark.model;
 import java.util.Map;
 
 public class Train {
-    private final StationTime starts;
-    private final StationTime ends;
+    private final TimeOfDay starts;
+    private final TimeOfDay ends;
     private final String line;
     private final String direction;
     private final String name;
@@ -15,8 +15,8 @@ public class Train {
     public Train(String lineName,
                  String direction,
                  String trainName,
-                 StationTime starts,
-                 StationTime ends,
+                 TimeOfDay starts,
+                 TimeOfDay ends,
                  Map<String,Timetable> timetables) {
         this.line = lineName;
         this.direction = direction;
@@ -42,20 +42,20 @@ public class Train {
         return timetables;
     }
 
-    public StationTime getStarts() {
+    public TimeOfDay getStarts() {
         return starts;
     }
 
-    public StationTime getEnds() {
+    public TimeOfDay getEnds() {
         return ends;
     }
 
     public static class Timetable {
         private final String stationName;
-        private final StationTime arrives;
-        private final StationTime departs;
+        private final TimeOfDay arrives;
+        private final TimeOfDay departs;
 
-        public Timetable(String stationName, StationTime arrives, StationTime departs) {
+        public Timetable(String stationName, TimeOfDay arrives, TimeOfDay departs) {
             this.stationName = stationName;
             this.arrives = arrives;
             this.departs = departs;
@@ -65,11 +65,11 @@ public class Train {
             return stationName;
         }
 
-        public StationTime getArrives() {
+        public TimeOfDay getArrives() {
             return arrives;
         }
 
-        public StationTime getDeparts() {
+        public TimeOfDay getDeparts() {
             return departs;
         }
     }

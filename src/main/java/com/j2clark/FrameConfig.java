@@ -7,6 +7,7 @@ import com.j2clark.service.ScheduleService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 
 import java.awt.*;
 
@@ -27,8 +28,8 @@ public class FrameConfig {
      * @throws Exception
      */
     @Bean("platformFrame")
-    public Frame platformFrame(Dimension displayDimensions, ScheduleService scheduleService) throws Exception {
-        return new PlatformFrame(displayDimensions, scheduleService);
+    public Frame platformFrame(Environment env, Dimension displayDimensions, ScheduleService scheduleService) throws Exception {
+        return new PlatformFrame(env, displayDimensions, scheduleService);
     }
 
 }
