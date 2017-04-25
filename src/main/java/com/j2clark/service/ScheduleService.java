@@ -130,6 +130,18 @@ public class ScheduleService {
         System.out.println(/*spacer*/);
     }
 
+    public List<ScheduleDAO.Route> findAllRoutes() {
+        return scheduleDAO.findAllRoutes();
+    }
+
+    public List<ScheduleDAO.RouteSchedule> findAllRouteSchedules() {
+        return scheduleDAO.findAllRouteSchedules();
+    }
+
+    public List<Station> findAllStations() {
+        return scheduleDAO.findStations();
+    }
+
     public List<Line> findAllLines() {
         return scheduleDAO.findAllLines();
     }

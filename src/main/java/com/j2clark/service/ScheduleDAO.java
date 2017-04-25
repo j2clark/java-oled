@@ -219,6 +219,8 @@ public class ScheduleDAO {
             + " ORDER BY\n"
             + "p.route_id, p.order_num";
 
+        System.out.println(sql);
+
         return jdbcTemplate.query(sql, new RouteExtractor());
     }
 
@@ -522,9 +524,10 @@ public class ScheduleDAO {
                     // new row - clean up old row if required
                     if (!plans.isEmpty()) {
 
-                        routes.add(newRoute(routeId, directionStr, lineName, routeName, plans));
+                        routes.add(newRoute(lastRouteId, directionStr, lineName, routeName, plans));
                     }
                     plans = new ArrayList<>();
+                    lastRouteId = routeId;
                 } else if (lastRouteId == null) {
                     lastRouteId = routeId;
                 }
